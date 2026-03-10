@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>混沌踊戦</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      color: white;
+      background: url("back(1).png") center/cover no-repeat fixed;
+    }
+
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: -1;
+    }
+
+
+    .header {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 50px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+
+    .s {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+      font-size: 18px;
+      line-height: 1.7;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(200px);
+    }
+
+
+    .player {
+      width: 900px;
+      max-width: 95%;
+      margin: 60px auto;
+      position: relative;
+      background: black;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    }
+
+    video {
+      width: 100%;
+      display: block;
+    }
+
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90px;
+      height: 90px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .play-btn:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .play-btn:after {
+      content: "";
+      border-left: 28px solid white;
+      border-top: 16px solid transparent;
+      border-bottom: 16px solid transparent;
+      margin-left: 6px;
+    }
+
+
+    .controls {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+      padding: 12px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 6px;
+      background: #333;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #ff0000;
+      width: 0%;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.2);
+    }
+
+
+    .episodes {
+      text-align: center;
+      margin: 40px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+
+    .collab {
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+    }
+
+    .collab a {
+      color: #4da6ff;
+      font-weight: bold;
+    }
+
+
+    footer {
+      margin-top: 100px;
+      padding: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+      border-top: 1px solid #333;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="header">
+    <img src="backdrop.png"></div>
+  </div>
+
+  <div class="s" id="s">
+
+    <h2> "踊り"<br> 踊りとは、古来より神に捧げる為の神聖な儀式であった。<br> その歴史は8000年も受け継がれてきた。<br> 長い歴史の中で、意味や形式は変わりつつも、特別な意味を<br>
+      持つという点は今も昔も同じだ。<br> 現実世界では踊りを踊っても何か変化が起こる訳ではないが、<br> この世界では踊ると何か効果が現れる。<br> 人々はこれを神から与えられた神聖な能力と信じ、崇め、称え、恐れた。<br>
+      争いを生まない為に踊りを平和利用すると誓った。<br> しかし…そんな「踊り」を悪用し、世界を乗っ取ろうとする者も現れる。<br> 神罰をも恐れぬ悪意は、世界中に広がっていく。<br> 混沌とした踊り達の戦い。つまり…<br>
+      混沌踊戦である。 </h2>
+
+  </div>
+
+  <div class="episodes">
+
+    <h2>エピソード</h2>
+
+    <select onchange="ce(this.value)">
+      <option value="1.mkv">第1話</option>
+      <option value="2.mkv">第2話</option>
+    </select>
+
+  </div>
+
+  <div class="player">
+
+    <video id="video">
+      <source id="videosource" src="1.mkv">
+    </video>
+
+    <div class="play-btn" id="playbtn"></div>
+
+    <div class="controls">
+
+      <div class="progress" id="progress">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="buttons">
+        <button id="play">▶</button>
+        <button onclick="fs()">⛶</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="collab">
+
+    <h2>コラボ参加募集</h2>
+
+    <p>
+      あなたのキャラクターを混沌踊戦に参加させてみませんか?
+    </p>
+
+    <p>
+      <a href="https://scratch.mit.edu/projects/1282462308/" target="_blank">
+        混沌踊戦コラボシート
+      </a>
+    </p>
+
+  </div>
+
+  <footer>
+
+    <p>© 2026 -Esuesu2526- - 混沌踊戦</p>
+    <p>サイト制作者: luwarz1024 / lyka65536</p>
+
+  </footer>
+
+  <script>
+
+    const video = document.getElementById("video");
+    const play = document.getElementById("play");
+    const playbtn = document.getElementById("playbtn");
+    const progress = document.getElementById("progress");
+    const progressBar = document.getElementById("progress-bar");
+
+    play.onclick = togglePlay;
+    playbtn.onclick = togglePlay;
+
+    function togglePlay() {
+
+      if (video.paused) {
+        video.play();
+        play.textContent = "❚❚";
+        playbtn.style.display = "none";
+      } else {
+        video.pause();
+        play.textContent = "▶";
+        playbtn.style.display = "flex";
+      }
+
+    }
+
+    video.addEventListener("timeupdate", () => {
+
+      const percent = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = percent + "%";
+
+    });
+
+    progress.onclick = (e) => {
+
+      const width = progress.clientWidth;
+      const clickX = e.offsetX;
+      const duration = video.duration;
+
+      video.currentTime = (clickX / width) * duration;
+
+    };
+
+    function fs() {
+      //node.jsじゃないよ!!((((
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      }
+
+    }
+
+    function ce(file) {
+
+      const source = document.getElementById("videosource");
+
+      source.src = file;
+      video.load();
+      video.play();
+
+    }
+
+    video.addEventListener("touchstart", togglePlay);
+
+    const s = document.getElementById("s");
+
+    const observer = new IntersectionObserver(entries => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+          s.animate(
+            [
+              { transform: 'translateY(200px)', opacity: 0 },
+              { transform: 'translateY(0)', opacity: 1 }
+            ],
+            {
+              duration: 1500,
+              fill: 'forwards'
+            }
+          );
+
+        }
+
+      });
+
+    });
+
+    observer.observe(s);
+
+  </script>
+
+</body>
+
+</html>
